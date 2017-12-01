@@ -43,12 +43,12 @@ public class BlueJewels extends LinearOpMode {
         armX = hardwareMap.get(Servo.class, "armX");
         boolean jewelDone = false;
 
-        armX.setPosition(0.5);
-        armY.setPosition(1);
         // wait for the start button to be pressed.
         waitForStart();
+        armX.setPosition(0.5);
+        armY.setPosition(0.65);
         ElapsedTime opmodeRunTime = new ElapsedTime();
-        armY.setPosition(0.55);
+        armY.setPosition(0.15);
         while (opModeIsActive()) {
             if (opmodeRunTime.seconds() > 3 && !jewelDone) {
                 telemetry.addData("Red  ", sensorColor.red());
@@ -57,24 +57,24 @@ public class BlueJewels extends LinearOpMode {
                 telemetry.update();
 
                 if (sensorColor.red() > sensorColor.blue()) {
-                    armX.setPosition(0.625);
+                    armX.setPosition(0.8);
                     jewelDone = true;
                     telemetry.addLine("Moving X-Axis; Color Red");
                     telemetry.update();
                 } else if (sensorColor.blue() > sensorColor.red()) {
-                    armX.setPosition(0.325);
+                    armX.setPosition(0.3);
                     jewelDone = true;
                     telemetry.addLine("Moving X-Axis; Color Blue");
                     telemetry.update();
                 } else {
-                    telemetry.addLine("Too Close To Tell");
-                    jewelDone = true;
-                    telemetry.update();
-                }
+                telemetry.addLine("Too Close To Tell");
+                jewelDone = true;
+                telemetry.update();
             }
-            if (jewelDone){
-                armX.setPosition(0.5);
-                armY.setPosition(1);
+            }
+            if (opmodeRunTime.seconds() > 5 && jewelDone){
+                armX.setPosition(0.4);
+                armY.setPosition(0.65);
             }
         }
     }
