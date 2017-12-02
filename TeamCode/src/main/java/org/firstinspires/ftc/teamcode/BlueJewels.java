@@ -27,7 +27,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 /**
  * Created by 4924_Users on 11/22/2017.
  */
-@Autonomous(name = "Blue Jewels", group = "Iterative")
+@Autonomous(name = "Blue Jewels 2", group = "Iterative")
 public class BlueJewels extends LinearOpMode {
 
     ColorSensor sensorColor;
@@ -45,7 +45,7 @@ public class BlueJewels extends LinearOpMode {
 
         // wait for the start button to be pressed.
         waitForStart();
-        armX.setPosition(0.5);
+        //armX.setPosition(0.5);
         armY.setPosition(0.65);
         ElapsedTime opmodeRunTime = new ElapsedTime();
         armY.setPosition(0.15);

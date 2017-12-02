@@ -27,7 +27,7 @@ public class RedJewels extends LinearOpMode {
 
         // wait for the start button to be pressed.
         waitForStart();
-        armX.setPosition(0.5);
+        //armX.setPosition(0.5);
         armY.setPosition(0.65);
         ElapsedTime opmodeRunTime = new ElapsedTime();
         armY.setPosition(0.15);

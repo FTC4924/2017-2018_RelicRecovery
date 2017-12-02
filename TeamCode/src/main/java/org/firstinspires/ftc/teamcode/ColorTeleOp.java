@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name = "ColorTeleOp", group = "Iterative Opmode")
+@TeleOp(name = "TeleOp Testing 2", group = "Iterative Opmode")
 
 public class ColorTeleOp extends OpMode {
     // Declare OpMode members.
@@ -55,6 +55,7 @@ public class ColorTeleOp extends OpMode {
     private CRServo clawServo = null;
     private Servo armY = null;
     private Servo armX = null;
+    private Servo alignmentDevice = null;
     /*
 
      * Code to run ONCE when the driver hits INIT
@@ -79,6 +80,7 @@ public class ColorTeleOp extends OpMode {
         clawServo = hardwareMap.get(CRServo.class, "clawServo");
         armY = hardwareMap.get(Servo.class, "armY");
         armX = hardwareMap.get(Servo.class, "armX");
+        alignmentDevice= hardwareMap.get(Servo.class, "alignmentDevice");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -93,6 +95,7 @@ public class ColorTeleOp extends OpMode {
         barServo.setPosition(STARTPOSITION180);
         armX.setPosition(0.5);
         armY.setPosition(1);
+        alignmentDevice.setPosition(1);
         //Set the continous servos to a neutral power, to make sure they do not move while
         // initiallizing
         clawServo.setPower(0);
@@ -219,6 +222,15 @@ public class ColorTeleOp extends OpMode {
             //we set deliveryPower to 1
             deliveryPower = 1;
         }
+
+        if (gamepad1.dpad_down) {
+            alignmentDevice.setPosition(0.65);
+        } else if(gamepad1.dpad_up){
+            alignmentDevice.setPosition(0.75);
+        } else {
+            alignmentDevice.setPosition(0);
+        }
+
 
         //we calculate the power to send to each different wheel, which each need their own power
         //since it is calculated in different ways, because of the turning and holonomic abilities
