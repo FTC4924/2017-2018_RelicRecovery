@@ -93,8 +93,8 @@ public class ColorTeleOp extends OpMode {
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
         //Set the 180 servos to their middle position
         barServo.setPosition(STARTPOSITION180);
-        armX.setPosition(0.5);
-        armY.setPosition(1);
+        armX.setPosition(0.4);
+        armY.setPosition(0.65);
         alignmentDevice.setPosition(1);
         //Set the continous servos to a neutral power, to make sure they do not move while
         // initiallizing
@@ -131,6 +131,9 @@ public class ColorTeleOp extends OpMode {
         final double BARDOWN = 1.0;
         double position = 0.0;
         double clawPosition = 0.0;
+        double devicePosition = 0.0;
+        double x = 0.125;
+        double y = 0.55;
 
         //we set what to do when the motor is not given power, which is to brake completely,
         //instead of coasting
@@ -164,7 +167,7 @@ public class ColorTeleOp extends OpMode {
         // finer adjustments
         double elbow = gamepad1.right_stick_y;
         //elbow is a variable set to the amount of power the driver wants to give to move this servo
-        double clawPower = gamepad2.right_stick_y;
+        double clawPower = -gamepad2.right_stick_y;
         //clawPower is a variable set to the amount of power the driver wants to give to move
         // this servo
 
@@ -188,29 +191,28 @@ public class ColorTeleOp extends OpMode {
         }
 
         if (gamepad2.y) {
-            //if the driver hits the left bumper, that signals that the driver wants to make
-            // the kicker go up, and kick the block up
-            armY.setPosition(0.55);
-            position = 0.55;
+
+            y = y + 0.05;
+            armY.setPosition(y);
+            position = y;
         } else {
-            //If the driver does not press this button, we let the kicker fall down
-            armY.setPosition(1);
-            position = 1;
+            armY.setPosition(y);
+            position = y;
         }
 
 
         if (gamepad2.dpad_left) {
-            //if the driver hits the left bumper, that signals that the driver wants to make
-            // the kicker go up, and kick the block up
-            armX.setPosition(0.325);
-            clawPosition = 0.325;
+
+             x = x + 0.1;
+            armX.setPosition(x);
+            clawPosition = x;
         } else if (gamepad2.dpad_right){
-            //If the driver does not press this button, we let the kicker fall down
-            armX.setPosition(0.125);
-            clawPosition = 0.125;
+            x =x - 0.1;
+            armX.setPosition(x);
+            clawPosition = x;
         } else {
-            armX.setPosition(0.25);
-            clawPosition = 0.25;
+            armX.setPosition(x);
+            clawPosition = x;
         }
 
         if (deliveryUp) {
@@ -224,11 +226,14 @@ public class ColorTeleOp extends OpMode {
         }
 
         if (gamepad1.dpad_down) {
-            alignmentDevice.setPosition(0.65);
+            alignmentDevice.setPosition(0.5);
+            devicePosition = 0.5;
         } else if(gamepad1.dpad_up){
-            alignmentDevice.setPosition(0.75);
+            alignmentDevice.setPosition(0.25);
+            devicePosition = 0.75;
         } else {
-            alignmentDevice.setPosition(0);
+            alignmentDevice.setPosition(1);
+            devicePosition = 0;
         }
 
 
@@ -271,6 +276,7 @@ public class ColorTeleOp extends OpMode {
        telemetry.addData("Status", "Run Time: " + runtime.toString());
        telemetry.addData("Position in Y-Axis", position);
         telemetry.addData("Position in X-Axis", clawPosition);
+        telemetry.addData("Alignment Device Position", devicePosition);
        //we make the turn values 0, so that the robot will stop turning
         turnLeft = 0;
         turnRight = 0;
