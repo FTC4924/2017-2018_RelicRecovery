@@ -107,7 +107,7 @@ public class IterativeBlueNear extends IterativeRobot {
         }
         {
 
-            CRYPTOBOX_CENTER_DISTANCE = 35.5;
+            CRYPTOBOX_CENTER_DISTANCE = 15.5;
         }
 
         {
@@ -149,16 +149,20 @@ public class IterativeBlueNear extends IterativeRobot {
 
             if(!isFinished) {
 
+                driveWithEncoders(DRIVE_POWER, 10);
+                driveWithEncoders(DRIVE_POWER, 10);
                 driveWithEncoders(DRIVE_POWER, calculateInches());
                 if(startingPosition().isRed()) reverseDriveBase();
                 turnWithEncoders(TURN_POWER, -18);
                 driveWithEncoders(DRIVE_POWER, 5);
                 elapsedTime.reset();
-                while(elapsedTime.time() < 3) collectionMotor.setPower(-0.5);
+                while((elapsedTime.time() < 5) && opModeIsActive()) collectionMotor.setPower(-0.5);
                 collectionMotor.setPower(0);
-                driveWithEncoders(DRIVE_POWER/2, 10);
+                elapsedTime.reset();
+                while((elapsedTime.time() < 4) && opModeIsActive()) {
+                    setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
+                }
                 driveWithEncoders(DRIVE_POWER, -6);
-                isFinished = true;
             }
         }
 

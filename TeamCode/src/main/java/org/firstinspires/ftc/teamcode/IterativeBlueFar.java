@@ -221,15 +221,22 @@ public class IterativeBlueFar extends IterativeRobot {
         while(opModeIsActive()) {
 
             if(!isFinished) {
-                driveWithEncoders(DRIVE_POWER, 26);
+
+                driveWithEncoders(DRIVE_POWER, 10);
+                driveWithEncoders(DRIVE_POWER, 13);
                 turnWithEncoders(TURN_POWER, 18);
                 driveWithEncoders(DRIVE_POWER, calculateInches());
                 if(startingPosition().isRed()) reverseDriveBase();
-                turnWithEncoders(TURN_POWER, -19);
+                turnWithEncoders(TURN_POWER, -17);
                 elapsedTime.reset();
-                while(elapsedTime.time() < 3) collectionMotor.setPower(-0.5);
+                while((elapsedTime.time() < 4) && opModeIsActive()){
+                    collectionMotor.setPower(-0.5);
+                }
                 collectionMotor.setPower(0);
-                driveWithEncoders(DRIVE_POWER/2, 10);
+                elapsedTime.reset();
+                while((elapsedTime.time() < 4) && opModeIsActive()) {
+                    setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
+                }
                 driveWithEncoders(DRIVE_POWER, -6);
                 isFinished = true;
             }

@@ -124,7 +124,7 @@ public abstract class IterativeRobot extends LinearOpMode {
 
         setMotorsModes(DcMotor.RunMode.RUN_TO_POSITION, DRIVE_BASE_MOTORS);
 
-        while (Math.abs(DRIVE_BASE_MOTORS[0].getCurrentPosition() - DRIVE_BASE_MOTORS[0].getTargetPosition()) > ENCODER_TOLERANCE && opModeIsActive())
+        while (Math.abs(DRIVE_BASE_MOTORS[1].getCurrentPosition() - DRIVE_BASE_MOTORS[1].getTargetPosition()) > ENCODER_TOLERANCE && opModeIsActive())
 
             setMotorsPowers(movePower, DRIVE_BASE_MOTORS);
 
@@ -201,14 +201,14 @@ public abstract class IterativeRobot extends LinearOpMode {
 
         setMotorsModes(DcMotor.RunMode.RUN_TO_POSITION, DRIVE_BASE_MOTORS);
         //setMotorsModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER, new DcMotor[] {frontRightMotor, backLeftMotor, backRightMotor});
-        while (Math.abs(DRIVE_BASE_MOTORS[0].getCurrentPosition() - DRIVE_BASE_MOTORS[0].getTargetPosition()) > ENCODER_TOLERANCE && opModeIsActive()) {
+        while (Math.abs(DRIVE_BASE_MOTORS[1].getCurrentPosition() - DRIVE_BASE_MOTORS[1].getTargetPosition()) > ENCODER_TOLERANCE && opModeIsActive()) {
 
             writeTelemetry(getHeading());
             frontLeftMotor.setPower(-turnPower);
             frontRightMotor.setPower(turnPower);
             backLeftMotor.setPower(-turnPower);
             backRightMotor.setPower(turnPower);
-            writeTelemetry(DRIVE_BASE_MOTORS[0].getTargetPosition());
+            writeTelemetry(DRIVE_BASE_MOTORS[1].getTargetPosition());
         }/*
         if ((frontLeftMotor.getCurrentPosition() - frontLeftMotor.getTargetPosition()) > 5) {
             turn(turnPower, RotationalDirection.COUNTER_CLOCKWISE);
