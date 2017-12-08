@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name = "TeleOp Testing 2", group = "Iterative Opmode")
+@TeleOp(name = "RRHolonomic", group = "Iterative Opmode")
 
 public class ColorTeleOp extends OpMode {
     // Declare OpMode members.
@@ -93,8 +93,8 @@ public class ColorTeleOp extends OpMode {
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
         //Set the 180 servos to their middle position
         barServo.setPosition(STARTPOSITION180);
-        armX.setPosition(0.4);
-        armY.setPosition(0.65);
+        //armX.setPosition(0.4);
+        //armY.setPosition(0.65);
         alignmentDevice.setPosition(1);
         //Set the continous servos to a neutral power, to make sure they do not move while
         // initiallizing
@@ -102,6 +102,8 @@ public class ColorTeleOp extends OpMode {
         elbowServo.setPower(0);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+
+
     }
 
     /*
@@ -119,6 +121,10 @@ public class ColorTeleOp extends OpMode {
         runtime.reset();
     }
 
+    double x = 0.125;
+    double y = 0.65;
+    double alignment = 1;
+
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
@@ -130,10 +136,7 @@ public class ColorTeleOp extends OpMode {
         final double BARMOVE = -1.0;
         final double BARDOWN = 1.0;
         double position = 0.0;
-        double clawPosition = 0.0;
-        double devicePosition = 0.0;
-        double x = 0.125;
-        double y = 0.55;
+        double servoStep = 0.02;
 
         //we set what to do when the motor is not given power, which is to brake completely,
         //instead of coasting
@@ -191,28 +194,18 @@ public class ColorTeleOp extends OpMode {
         }
 
         if (gamepad2.y) {
-
-            y = y + 0.05;
-            armY.setPosition(y);
-            position = y;
-        } else {
-            armY.setPosition(y);
-            position = y;
+            y += servoStep;
+        }
+        if(gamepad2.x) {
+           y -= servoStep;
         }
 
 
         if (gamepad2.dpad_left) {
-
-             x = x + 0.1;
-            armX.setPosition(x);
-            clawPosition = x;
-        } else if (gamepad2.dpad_right){
-            x =x - 0.1;
-            armX.setPosition(x);
-            clawPosition = x;
-        } else {
-            armX.setPosition(x);
-            clawPosition = x;
+             x += servoStep;
+        }
+        if (gamepad2.dpad_right){
+            x -= servoStep;
         }
 
         if (deliveryUp) {
@@ -226,14 +219,11 @@ public class ColorTeleOp extends OpMode {
         }
 
         if (gamepad1.dpad_down) {
-            alignmentDevice.setPosition(0.5);
-            devicePosition = 0.5;
-        } else if(gamepad1.dpad_up){
-            alignmentDevice.setPosition(0.25);
-            devicePosition = 0.75;
-        } else {
-            alignmentDevice.setPosition(1);
-            devicePosition = 0;
+            alignment = 0.5;
+        } else if(gamepad1.dpad_left){
+            alignment = alignment + servoStep;
+        } else if(gamepad1.dpad_right) {
+            alignment = alignment - servoStep;
         }
 
 
@@ -270,13 +260,16 @@ public class ColorTeleOp extends OpMode {
         deliveryMotor.setPower(deliveryPower);
         elbowServo.setPower(elbow);
         clawServo.setPower(clawPower);
+        alignmentDevice.setPosition(alignment);
+        armX.setPosition(x);
+        armY.setPosition(y);
 
 
         // Show the elapsed game time
        telemetry.addData("Status", "Run Time: " + runtime.toString());
-       telemetry.addData("Position in Y-Axis", position);
-        telemetry.addData("Position in X-Axis", clawPosition);
-        telemetry.addData("Alignment Device Position", devicePosition);
+       telemetry.addData("Position in Y-Axis", y);
+        telemetry.addData("Position in X-Axis", x);
+        telemetry.addData("Alignment Device Position", alignment);
        //we make the turn values 0, so that the robot will stop turning
         turnLeft = 0;
         turnRight = 0;
