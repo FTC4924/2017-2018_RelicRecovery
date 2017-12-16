@@ -161,7 +161,7 @@ public class IterativeBlueFar extends IterativeRobot {
 
         }
 
-        CRYPTOBOX_CENTER_DISTANCE = 11;
+        CRYPTOBOX_CENTER_DISTANCE = 7;
         if (STARTING_POSITION.isBlue()) { //cryptobox is reversed when colors change
 
             CRYPTOBOX_LEFT_DISTANCE = CRYPTOBOX_CENTER_DISTANCE - CRYPTOBOX_OFFSET;
@@ -292,10 +292,15 @@ public class IterativeBlueFar extends IterativeRobot {
                 }
                 collectionMotor.setPower(0);
                 elapsedTime.reset();
-                while((elapsedTime.time() < 4) && opModeIsActive()) {
-                    setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
+                while((elapsedTime.time() < 1) && opModeIsActive()) {
+                    frontLeftMotor.setPower(0.2);
+                    frontRightMotor.setPower(0.2);
+                    backLeftMotor.setPower(0.2);
+                    backRightMotor.setPower(0.2);
                 }
-                driveWithEncoders(DRIVE_POWER, -6);
+                driveWithEncoders(DRIVE_POWER, -5);
+                collectionMotor.setPower(0);
+                setMotorsPowers(0, DRIVE_BASE_MOTORS);
                 isFinished = true;
             }
         }

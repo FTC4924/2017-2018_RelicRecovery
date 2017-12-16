@@ -121,7 +121,7 @@ public class ColorTeleOp extends OpMode {
         runtime.reset();
     }
 
-    double x = 0.125;
+    double x = 0.35;
     double y = 0.65;
     double alignment = 1;
 

@@ -206,7 +206,7 @@ public class IterativeBlueNear extends IterativeRobot {
 
             if((!isFinished) && startGlyph) {
 
-                driveWithEncoders(DRIVE_POWER, 10);
+                driveWithEncoders(DRIVE_POWER, 4);
                 driveWithEncoders(DRIVE_POWER, 10);
                 driveWithEncoders(DRIVE_POWER, calculateInches());
                 if(startingPosition().isRed()) reverseDriveBase();
@@ -216,10 +216,15 @@ public class IterativeBlueNear extends IterativeRobot {
                 while((elapsedTime.time() < 5) && opModeIsActive()) collectionMotor.setPower(-0.5);
                 collectionMotor.setPower(0);
                 elapsedTime.reset();
-                while((elapsedTime.time() < 4) && opModeIsActive()) {
-                    setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
+                while((elapsedTime.time() < 1) && opModeIsActive()) {
+                    frontLeftMotor.setPower(0.2);
+                    frontRightMotor.setPower(0.2);
+                    backLeftMotor.setPower(0.2);
+                    backRightMotor.setPower(0.2);
                 }
-                driveWithEncoders(DRIVE_POWER, -6);
+                driveWithEncoders(DRIVE_POWER, -5);
+                setMotorsPowers(0, DRIVE_BASE_MOTORS);
+                isFinished = true;
             }
         }
 
