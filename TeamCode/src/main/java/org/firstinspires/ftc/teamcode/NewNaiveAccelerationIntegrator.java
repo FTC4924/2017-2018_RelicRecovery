@@ -71,8 +71,11 @@ public class NewNaiveAccelerationIntegrator implements BNO055IMU.AccelerationInt
 
                     if (accelPrev.acquisitionTime != 0)
                     {
-                        Velocity deltaVelocity = meanIntegrate(acceleration, accelPrev);
-                        velocity = plus(velocity, deltaVelocity);
+
+                        if(Math.abs(acceleration.xAccel) > 0.2) { //filtering out noise data - if the acceleration is less than 0.2, the delta is given to be 0... TODO: confirm if this does as intended
+                            Velocity deltaVelocity = meanIntegrate(acceleration, accelPrev);
+                            velocity = plus(velocity, deltaVelocity);
+                        }
                     }
 
                     if (velocityPrev.acquisitionTime != 0)

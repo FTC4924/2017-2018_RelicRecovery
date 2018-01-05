@@ -23,11 +23,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.util.Locale;
+
 /**
  * Created by admin on 11/11/2017.
  */
 
-@Autonomous(name = "IterativeRobot")
 public abstract class AccelerometerRobot extends LinearOpMode {
 
     /* FIELD PARAMETERS *///commit_file
@@ -279,14 +280,9 @@ public abstract class AccelerometerRobot extends LinearOpMode {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        /*collectionMotor.setDirection(DcMotor.Direction.FORWARD);
+        collectionMotor.setDirection(DcMotor.Direction.FORWARD);
         relicExtension.setDirection(DcMotor.Direction.FORWARD);
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
-*/
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -297,10 +293,7 @@ public abstract class AccelerometerRobot extends LinearOpMode {
 
         while(opModeIsActive()) {
 
-            frontLeftMotor.setPower(0.3);
-            frontRightMotor.setPower(0.3);
-            backLeftMotor.setPower(0.3);
-            backRightMotor.setPower(0.3);
+
         }
     }
 }
