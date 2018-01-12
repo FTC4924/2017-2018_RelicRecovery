@@ -1,9 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Gyro;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.hardware.bosch.NaiveAccelerationIntegrator;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -12,36 +9,34 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Supplier;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.Accelerometer.NewNaiveAccelerationIntegrator;
+import org.firstinspires.ftc.teamcode.RobotPosition;
+import org.firstinspires.ftc.teamcode.RotationalDirection;
 
 /**
- * Created by admin on 11/11/2017.
+ * Created by 4924_Users on 12/30/2017.
  */
 
-public abstract class IterativeRobot extends LinearOpMode {
-
-    /* FIELD PARAMETERS *///commit_file
+public class GyroRobot extends LinearOpMode {
 
     protected static final double DRIVE_POWER = 0.4;
-    protected static final double TURN_POWER = 0.3;
+    protected static final double TURN_POWER = 0.4;
     //to center of cryptobox
     protected static final double CRYPTOBOX_OFFSET = 6.5; //offset of left/right areas of cryptobox
-    /* ROBOT CONSTANTS*/
     private static final int ENCODER_TICKS_PER_ROTATION = 1120; //encoder counts per shaft turn
     private static final int MOTOR_TEETH = 32;
     private static final int WHEEL_TEETH = 16;
     private static final double GEAR_RATIO = WHEEL_TEETH / (double) MOTOR_TEETH; //48 teeth on motor gear, 32 teeth on wheel gear
     private static final double WHEEL_DIAMETER = 4;
-    /* HARDWARE */
     //declares our hardware, initialized later in init()
     private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI; //wheel diameter * pi
     private static final double COUNTS_PER_INCH =
@@ -52,56 +47,39 @@ public abstract class IterativeRobot extends LinearOpMode {
     protected static double CRYPTOBOX_CENTER_DISTANCE = Double.MIN_VALUE; //distance from center of relic-side
     protected static RobotPosition STARTING_POSITION;
     protected static DcMotor[] DRIVE_BASE_MOTORS = new DcMotor[4];
-    protected static DcMotor[] ALL_MOTORS = new DcMotor[4];
-    ColorSensor sensorColor;
-    /* TIME */
+    protected static DcMotor[] ALL_MOTORS = new DcMotor[8];
     protected static ElapsedTime elapsedTime = new ElapsedTime();
-    static double offset = 0;
-    /* SENSORS */
+
     static BNO055IMU imu;
-    /* NAVIGATION */
+
     static BNO055IMU.Parameters IMU_Parameters = new BNO055IMU.Parameters();
-    /* VUFORIA */
-    //fields for camera recognition
-    static RelicRecoveryVuMark vuMark; //enum set based on pictogram reading
-    /* STATES *//*
+    Orientation angles;
 
-    enum STATE {
-
-        DRIVE,
-        TURN,
-        STOP;
-
-        STATE[] toArray() {
-
-
-        }
-    }*/
-    // from cryptobox center in inches, should be 6.5, but exaggerated for testing
-    static double CRYPTOBOX_LEFT_DISTANCE;
-    static double CRYPTOBOX_RIGHT_DISTANCE;
-    protected int cameraMonitorViewId;
-    /* MOTORS */
     static DcMotor frontLeftMotor;
     static DcMotor frontRightMotor;
     static DcMotor backLeftMotor;
-    //encoder ticks per inch moved
     static DcMotor backRightMotor;
-    private static Acceleration acceleration;
+
+    static RelicRecoveryVuMark vuMark; //enum set based on pictogram reading
+    static double CRYPTOBOX_LEFT_DISTANCE;
+    static double CRYPTOBOX_RIGHT_DISTANCE;
+    protected int cameraMonitorViewId;
+
     static VuforiaLocalizer vuforia; //later initialized with (sic) vuforiaParameters
     static VuforiaTrackables relicTrackables;
     static VuforiaTrackable relicTemplate;
-    DcMotor collectionMotor;
+    static DcMotor collectionMotor;
     VuforiaLocalizer.Parameters vuforiaParameters = new VuforiaLocalizer.Parameters();
-    DcMotor relicExtension;
-    DcMotor deliveryMotor;
-    Servo barServo;
-    CRServo elbowServo;
+    static DcMotor linearSlideMotor;
+    static DcMotor deliveryMotor;
+    static Servo barServo;
+    static CRServo elbowServo;
+    static CRServo clawServo;
+    static Servo jewelArmX;
+    static Servo jewelArmY;
+    static Servo alignmentDevice;
+    static ColorSensor colorSensor;
 
-    {
-
-        STARTING_POSITION = startingPosition();
-    }
 
     {
         msStuckDetectInit = 10000;
@@ -174,22 +152,23 @@ public abstract class IterativeRobot extends LinearOpMode {
             throw new IllegalArgumentException("RotationalDirection may be clockwise or counter-clockwise only");
     }
 
+    protected void turnToPosition(double turnPower, double desiredHeading) {
 
-    protected static void  turnToPosition(double turnPower, double desiredHeading) {
         //desiredHeading is the angle that we want to move to, it should be -180<x<180
         setMotorsModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER, DRIVE_BASE_MOTORS);
-        formatAngle(desiredHeading);
         //we reduce desiredHeading just in case it is formatted incorrectly
-        while (formatAngle((getHeading()) - desiredHeading) > GYRO_TURN_TOLERANCE_DEGREES) {
+        while (getHeading() - desiredHeading > GYRO_TURN_TOLERANCE_DEGREES) {
 
-            writeTelemetry(getHeading());
+            telemetry.addData("Heading", getHeading());
+            telemetry.update();
             turn(turnPower, RotationalDirection.COUNTER_CLOCKWISE);
         }
         //if it is faster to turn CCW, then robot turns CCW
 
-        while (formatAngle((getHeading()) - desiredHeading) < -GYRO_TURN_TOLERANCE_DEGREES) {
+        while (getHeading() - desiredHeading < -GYRO_TURN_TOLERANCE_DEGREES) {
 
-            writeTelemetry(getHeading());
+            telemetry.addData("Heading", getHeading());
+            telemetry.update();
             turn(turnPower, RotationalDirection.CLOCKWISE);
         }
         setMotorsPowers(0, DRIVE_BASE_MOTORS);
@@ -221,22 +200,19 @@ public abstract class IterativeRobot extends LinearOpMode {
         setMotorsModes(DcMotor.RunMode.RUN_USING_ENCODER, DRIVE_BASE_MOTORS);
     }
 
-    static double formatAngle(double angle) {
-
-        angle %= 360;
-        if (Math.abs(angle) > 180) angle -= Math.signum(angle) * 360;
-        return angle;
-    }
-
-    protected static double getHeading() {
-
-        return formatAngle((-imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle % 360) - offset);
+    protected double getHeading() {
+        updateGyro();
+        return angles.firstAngle;
     }
 
     protected static void writeTelemetry(Object status) {
 
         staticTelemetry.addData(status.toString(), "");
         staticTelemetry.update();
+    }
+
+    void updateGyro() {
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
     double calculateInches() {
@@ -246,12 +222,23 @@ public abstract class IterativeRobot extends LinearOpMode {
         else return CRYPTOBOX_CENTER_DISTANCE;
     }
 
-    protected abstract RobotPosition startingPosition();
+    public final void runOpMode() {
 
-    //true for Autonomous, false for TeleOp
-    protected abstract boolean isAutonomous();
+        try {
+            Init();
+            while (!opModeIsActive()) Init_Loop();
+            waitForStart();
+            Start();
+            while (opModeIsActive()) Loop();
+            Stop();
+        } catch (Exception e) {
 
-    public void runOpMode() {
+            telemetry.addData("err", e.getMessage());
+            telemetry.addData("errStackTrace", e.getStackTrace());
+        }
+    }
+
+    protected void Init() {
 
         telemetry.addData("Status", "init");
         telemetry.update();
@@ -266,40 +253,68 @@ public abstract class IterativeRobot extends LinearOpMode {
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(IMU_Parameters);
-
-        /*collectionMotor = hardwareMap.get(DcMotor.class, "collectionMotor");
-        relicExtension = hardwareMap.get(DcMotor.class, "relicExtension");
+        telemetry.update();
+        updateGyro();
+        collectionMotor = hardwareMap.get(DcMotor.class, "collectionMotor");
+        linearSlideMotor = hardwareMap.get(DcMotor.class, "relicExtension");
         deliveryMotor = hardwareMap.get(DcMotor.class, "deliveryMotor");
-        elbowServo = hardwareMap.get(CRServo.class, "elbowServo");*/
-
+        elbowServo = hardwareMap.get(CRServo.class, "elbowServo");
+        barServo = hardwareMap.get(Servo.class, "barServo");
+        clawServo = hardwareMap.get(CRServo.class, "clawServo");
+        colorSensor = hardwareMap.get(ColorSensor.class, "color");
+        jewelArmY = hardwareMap.get(Servo.class, "armY");
+        jewelArmX = hardwareMap.get(Servo.class, "armX");
+        alignmentDevice = hardwareMap.get(Servo.class, "alignmentDevice");
 
         //one set of motors has to be reversed because they are facing a different way
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        /*collectionMotor.setDirection(DcMotor.Direction.FORWARD);
-        relicExtension.setDirection(DcMotor.Direction.FORWARD);
+        collectionMotor.setDirection(DcMotor.Direction.FORWARD);
+        linearSlideMotor.setDirection(DcMotor.Direction.FORWARD);
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
-*/
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        waitForStart();
 
-        while(opModeIsActive()) {
 
-            frontLeftMotor.setPower(0.3);
-            frontRightMotor.setPower(0.3);
-            backLeftMotor.setPower(0.3);
-            backRightMotor.setPower(0.3);
+        DRIVE_BASE_MOTORS[0] = frontLeftMotor;
+        DRIVE_BASE_MOTORS[1] = frontRightMotor;
+        DRIVE_BASE_MOTORS[2] = backLeftMotor;
+        DRIVE_BASE_MOTORS[3] = backRightMotor;
+
+        ALL_MOTORS[0] = frontLeftMotor;
+        ALL_MOTORS[1] = frontRightMotor;
+        ALL_MOTORS[2] = backLeftMotor;
+        ALL_MOTORS[3] = backRightMotor;
+        ALL_MOTORS[4] = collectionMotor;
+        ALL_MOTORS[5] = linearSlideMotor;
+        ALL_MOTORS[6] = deliveryMotor;
+
+        {
+
+            staticTelemetry = telemetry;
         }
+
+        barServo.setPosition(1);
+        //Set the continous servos to a neutral power, to make sure they do not move while
+        // initiallizing
+        clawServo.setPower(0);
+        elbowServo.setPower(0);
     }
-}
+
+    protected void Init_Loop() {}
+    protected void Start() {
+
+        elapsedTime.reset();
+    }
+    protected void Loop() {}
+    protected void Stop() {
+
+        setMotorsModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER, ALL_MOTORS);
+    }
+    }

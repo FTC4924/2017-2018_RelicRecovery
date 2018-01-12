@@ -27,112 +27,42 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Gyro;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-
 @Disabled
-@TeleOp(name = "RR_Holonomic", group = "Iterative Opmode")
+@TeleOp(name = "GyroHolonomic", group = "Iterative Opmode")
 
-public class RR_Holonomic extends OpMode {
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor frontLeftMotor = null;
-    private DcMotor frontRightMotor = null;
-    private DcMotor backLeftMotor = null;
-    private DcMotor backRightMotor = null;
-    private DcMotor collectionMotor = null;
-    private DcMotor relicExtension = null;
-    private DcMotor deliveryMotor = null;
-    private Servo barServo = null;
-    private CRServo elbowServo = null;
-    private CRServo clawServo = null;
-    /*
+public class GyroHolonomic extends GyroRobot {
 
-     * Code to run ONCE when the driver hits INIT
-     */
     @Override
-    public void init() {
-        final double MIDDLEPOSITION180 = 1.0;
-        telemetry.addData("Status", "Initialized");
+    public void Init() {
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
-        frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
-        backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
-        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
-        collectionMotor = hardwareMap.get(DcMotor.class, "collectionMotor");
-        relicExtension = hardwareMap.get(DcMotor.class, "relicExtension");
-        deliveryMotor = hardwareMap.get(DcMotor.class, "deliveryMotor");
-        barServo = hardwareMap.get(Servo.class, "barServo");
-        elbowServo = hardwareMap.get(CRServo.class, "elbowServo");
-        clawServo = hardwareMap.get(CRServo.class, "clawServo");
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        collectionMotor.setDirection(DcMotor.Direction.FORWARD);
-        relicExtension.setDirection(DcMotor.Direction.FORWARD);
-        deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
-        //Set the 180 servos to their middle position
-        barServo.setPosition(MIDDLEPOSITION180);
-        //Set the continous servos to a neutral power, to make sure they do not move while
-        // initiallizing
-        clawServo.setPower(0);
-        elbowServo.setPower(0);
+        super.Init();
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
     @Override
-    public void init_loop() {
+    public void Start() {
+
+        super.Start();
+        elapsedTime.reset();
     }
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
     @Override
-    public void start() {
-        runtime.reset();
-    }
+    public void Loop() {
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
-    @Override
-    public void loop() {
+        super.Loop();
         //We initialize and give certain values to certain variables, so that we can use them later
         double collectionPower = 0.0;
         double deliveryPower = 0.0;
-        final double BARMOVE = -1.0;
-        final double BARDOWN = 1.0;
-        double position = 0.0;
-        double clawPosition = 0.0;
-
-        //we set what to do when the motor is not given power, which is to brake completely,
-        //instead of coasting
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        final double BAR_MOVE = -1.0;
+        final double BAR_DOWN = 1.0;
 
         double drive = -gamepad1.left_stick_y;
         //drive is what direction we want to    move, either forwards, backwards, or neither
@@ -162,34 +92,14 @@ public class RR_Holonomic extends OpMode {
         //clawPower is a variable set to the amount of power the driver wants to give to move
         // this servo
 
-        if (collectionPowerUp) {
-            //if we want it to collect, we set collectionPower to 1
-            collectionPower = 1;
-        } else if (collectionPowerDown) {
-            //if we want the collection to deliver/spin backswards, we set collectionPower to -1
-            collectionPower = -1;
-        }
+        if (collectionPowerUp) collectionPower = 1;
+        else if (collectionPowerDown) collectionPower = -1;
 
-        if (gamepad2.left_bumper) {
-            //if the driver hits the left bumper, that signals that the driver wants to make
-            // the kicker go up, and kick the block up
-            barServo.setPosition(BARDOWN + BARMOVE);
-            position = BARDOWN + BARMOVE;
-        } else {
-            //If the driver does not press this button, we let the kicker fall down
-            barServo.setPosition(BARDOWN);
-            position = BARDOWN;
-        }
+        if (gamepad2.left_bumper) barServo.setPosition(BAR_DOWN + BAR_MOVE);
+        else barServo.setPosition(BAR_DOWN);
 
-        if (deliveryUp) {
-            //if we want the delivery to move the glyph forwards/deliver the glyph,
-            //we set deliveryPower to -1
-            deliveryPower = -1;
-        } else if (deliveryDown) {
-            //if we want the delivery to move the glyph backwards,
-            //we set deliveryPower to 1
-            deliveryPower = 1;
-        }
+        if (deliveryUp) deliveryPower = -1;
+        else if (deliveryDown) deliveryPower = 1;
 
         //we calculate the power to send to each different wheel, which each need their own power
         //since it is calculated in different ways, because of the turning and holonomic abilities
@@ -220,33 +130,27 @@ public class RR_Holonomic extends OpMode {
         backLeftMotor.setPower(backLeftPower);
         backRightMotor.setPower(backRightPower);
         collectionMotor.setPower(collectionPower);
-        relicExtension.setPower(linearSlide);
+        linearSlideMotor.setPower(linearSlide);
         deliveryMotor.setPower(deliveryPower);
         elbowServo.setPower(elbow);
         clawServo.setPower(clawPower);
-
-
-        // Show the elapsed game time
-       telemetry.addData("Status", "Run Time: " + runtime.toString());
-
-       //we make the turn values 0, so that the robot will stop turning
-        turnLeft = 0;
-        turnRight = 0;
-
+        telemetry.addData("Time to end: ", 160 - elapsedTime.seconds());
     }
 
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
     @Override
-    public void stop() {
+    public void Stop() {
+
+        super.Stop();
         //We make sure to turn everything off when the driver hits STOP
+        //In fact, the "STOP" function is assigned to a button with an image
+        //the "STOP" button's image is an red opaque square, in a white circle
+        //hitting this "stops" the program
         frontLeftMotor.setPower(0);
         frontRightMotor.setPower(0);
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
         collectionMotor.setPower(0);
-        relicExtension.setPower(0);
+        linearSlideMotor.setPower(0);
         deliveryMotor.setPower(0);
         elbowServo.setPower(0);
         clawServo.setPower(0);

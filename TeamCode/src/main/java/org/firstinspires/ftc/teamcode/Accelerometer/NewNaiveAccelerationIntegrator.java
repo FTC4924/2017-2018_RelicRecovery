@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Accelerometer;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
