@@ -123,7 +123,9 @@ public class ColorTeleOp extends OpMode {
 
     double x = 0.35;
     double y = 0.65;
-    double alignment = 1;
+    static double alignment = 1;
+    boolean leftTriggerPressed = false;
+    double elbow = 0;
 
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
@@ -135,7 +137,6 @@ public class ColorTeleOp extends OpMode {
         double deliveryPower = 0.0;
         final double BARMOVE = -1.0;
         final double BARDOWN = 1.0;
-        double position = 0.0;
         double servoStep = 0.02;
 
         //we set what to do when the motor is not given power, which is to brake completely,
@@ -147,7 +148,7 @@ public class ColorTeleOp extends OpMode {
 
 
         double drive = -gamepad1.left_stick_y;
-        //drive is what direction we want to    move, either forwards, backwards, or neither
+        //drive is what direction we want to move, either forwards, backwards, or neither
         double holonomic = -gamepad1.left_stick_x;
         //holonomic is what direction we want to move sideways
         double turnRight = gamepad1.right_trigger;
@@ -159,11 +160,11 @@ public class ColorTeleOp extends OpMode {
         boolean collectionPowerDown = gamepad2.a;
         //collectionPowerDown is dependent on whether or not we want the collection deliver
         //(Push downwards)
-        boolean deliveryUp = gamepad2.dpad_up;
+        /*boolean deliveryUp = gamepad2.dpad_up;
         //deliveryUp is dependent on whether or not we want the delivery to deliver
-        boolean deliveryDown = gamepad2.dpad_down;
+        boolean deliveryDown = gamepad2.dpad_down; */
         //deliveryDown is dependent on whether or not we want the delivery to go downwards
-        double linearSlide =  (gamepad2.left_stick_y);
+        double linearSlide = gamepad2.left_stick_y;
          //this extends the linearSlide using the measuring tape to extend it
         boolean slowSpeed = gamepad1.left_bumper;
         //slowSpeed says whether or not the driver wants to go at a slower speed, which can cause
@@ -174,11 +175,20 @@ public class ColorTeleOp extends OpMode {
         //clawPower is a variable set to the amount of power the driver wants to give to move
         // this servo
 
+        /*if ( gamepad1.right_stick_y < 0) {
+            elbow = 1.0;
+            telemetry.addData("Elbow Power", 1);
+        }
+        else{
+            elbow = 0.0;
+            telemetry.addData("Elbow Power", 0);
+        }*/
+
         if (collectionPowerUp) {
             //if we want it to collect, we set collectionPower to 1
             collectionPower = 1;
         } else if (collectionPowerDown) {
-            //if we want the collection to deliver/spin backswards, we set collectionPower to -1
+            //if we want the collection to deliver/spin backwards, we set collectionPower to -1
             collectionPower = -1;
         }
 
@@ -186,29 +196,40 @@ public class ColorTeleOp extends OpMode {
             //if the driver hits the left bumper, that signals that the driver wants to make
             // the kicker go up, and kick the block up
             barServo.setPosition(BARDOWN + BARMOVE);
-            position = BARDOWN + BARMOVE;
         } else {
             //If the driver does not press this button, we let the kicker fall down
             barServo.setPosition(BARDOWN);
-            position = BARDOWN;
         }
 
-        if (gamepad2.y) {
+        if (gamepad2.left_trigger > 0) {
+            leftTriggerPressed = true;
+        } else {
+            leftTriggerPressed = false;
+        }
+
+        if (gamepad2.dpad_up && !leftTriggerPressed) {
+            deliveryPower = 1;
+        }
+        if(!leftTriggerPressed && gamepad2.dpad_down) {
+            deliveryPower = -1;
+        }
+
+        if (gamepad2.dpad_up && leftTriggerPressed) {
             y += servoStep;
         }
-        if(gamepad2.x) {
+        if(leftTriggerPressed && gamepad2.dpad_down) {
            y -= servoStep;
         }
 
 
-        if (gamepad2.dpad_left) {
+        if (gamepad2.dpad_left && leftTriggerPressed) {
              x += servoStep;
         }
-        if (gamepad2.dpad_right){
+        if (gamepad2.dpad_right && leftTriggerPressed){
             x -= servoStep;
         }
 
-        if (deliveryUp) {
+        /*if (deliveryUp) {
             //if we want the delivery to move the glyph forwards/deliver the glyph,
             //we set deliveryPower to -1
             deliveryPower = -1;
@@ -216,15 +237,16 @@ public class ColorTeleOp extends OpMode {
             //if we want the delivery to move the glyph backwards,
             //we set deliveryPower to 1
             deliveryPower = 1;
+        }*/
+
+        if (gamepad1.dpad_left) {
+            alignment = 0.5;
+        } else if(gamepad1.dpad_up){
+            if(alignment - servoStep > 0) alignment -= servoStep;
+        } else if(gamepad1.dpad_down) {
+            if(alignment + servoStep < 1) alignment += servoStep;
         }
 
-        if (gamepad1.dpad_down) {
-            alignment = 0.5;
-        } else if(gamepad1.dpad_left){
-            alignment = alignment + servoStep;
-        } else if(gamepad1.dpad_right) {
-            alignment = alignment - servoStep;
-        }
 
 
         //we calculate the power to send to each different wheel, which each need their own power
@@ -266,7 +288,8 @@ public class ColorTeleOp extends OpMode {
 
 
         // Show the elapsed game time
-       telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addData("Elbow Power", elbow);
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
        telemetry.addData("Position in Y-Axis", y);
         telemetry.addData("Position in X-Axis", x);
         telemetry.addData("Alignment Device Position", alignment);
