@@ -125,7 +125,6 @@ public class ColorTeleOp extends OpMode {
     double y = 0.65;
     static double alignment = 1;
     boolean leftTriggerPressed = false;
-    double elbow = 0;
 
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
@@ -170,19 +169,13 @@ public class ColorTeleOp extends OpMode {
         //slowSpeed says whether or not the driver wants to go at a slower speed, which can cause
         // finer adjustments
         double elbow = gamepad1.right_stick_y;
+        if (elbow>0) elbow = 0.83;
+        else if (elbow <0) elbow = -0.83;
         //elbow is a variable set to the amount of power the driver wants to give to move this servo
         double clawPower = -gamepad2.right_stick_y;
         //clawPower is a variable set to the amount of power the driver wants to give to move
         // this servo
 
-        /*if ( gamepad1.right_stick_y < 0) {
-            elbow = 1.0;
-            telemetry.addData("Elbow Power", 1);
-        }
-        else{
-            elbow = 0.0;
-            telemetry.addData("Elbow Power", 0);
-        }*/
 
         if (collectionPowerUp) {
             //if we want it to collect, we set collectionPower to 1
@@ -229,15 +222,12 @@ public class ColorTeleOp extends OpMode {
             x -= servoStep;
         }
 
-        /*if (deliveryUp) {
-            //if we want the delivery to move the glyph forwards/deliver the glyph,
-            //we set deliveryPower to -1
-            deliveryPower = -1;
-        } else if (deliveryDown) {
-            //if we want the delivery to move the glyph backwards,
-            //we set deliveryPower to 1
-            deliveryPower = 1;
-        }*/
+        //This is temporary debugging code
+        if (gamepad1.a) {
+            elbow = -0.83;
+        } else if (gamepad1.y) {
+            elbow = 0.83;
+        }
 
         if (gamepad1.dpad_left) {
             alignment = 0.5;
@@ -272,6 +262,8 @@ public class ColorTeleOp extends OpMode {
             backLeftPower = 0.2 * (backLeftPower);
         }
 
+        //elbow = Range.clip(elbow,-1.0,1.0);
+
         // Send calculated power to wheels and motors
         frontLeftMotor.setPower(frontLeftPower);
         frontRightMotor.setPower(frontRightPower);
@@ -290,7 +282,7 @@ public class ColorTeleOp extends OpMode {
         // Show the elapsed game time
         telemetry.addData("Elbow Power", elbow);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-       telemetry.addData("Position in Y-Axis", y);
+        telemetry.addData("Position in Y-Axis", y);
         telemetry.addData("Position in X-Axis", x);
         telemetry.addData("Alignment Device Position", alignment);
        //we make the turn values 0, so that the robot will stop turning
