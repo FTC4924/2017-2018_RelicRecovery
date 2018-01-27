@@ -30,17 +30,7 @@ public abstract class GyroAutonomous extends GyroRobot {
     public void Init() {
 
         super.Init();
-        if (startingPosition().isRed()) {
-
-            reverseDriveBase();
-        }
-    }
-
-    @Override
-    public void Init_Loop() {
-
-        super.Init_Loop();
-        cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        //cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         // OR...  Do Not Activate the Camera Monitor View, to save power
@@ -59,7 +49,9 @@ public abstract class GyroAutonomous extends GyroRobot {
          * and paste it in to your code onthe next line, between the double quotes.
          */
         //parameters.vuforiaLicenseKey = "ATsODcD/////AAAAAVw2lR...d45oGpdljdOh5LuFB9nDNfckoxb8COxKSFX";
-        parameters.vuforiaLicenseKey = "AfgNWRP/////AAAAGTvgaD9NHEcegp9M9gVfWchUPuYO0sndvqbZcgtG8KGB6PCuQ3QWbV9b4twhV5fD/kl/3Iblwrmzj4Vw8DnXF6MS8PbHDXTMrzndAccgzFu+7cej0vmkb657jYHPtLz4Y7U5zIdyPHkbPz+9gRo9gtaUGBa3p8mezZd2qLlJNc4hcv1tcP4hRXsIPEf++0q7tVIco0JGNnd76A7G0REDE9/IKqaO32xvwPnPNS7C+NqcHdZjfRQMjy2FRWzfang2iz9z/Gu20FzSv2n3fhIEWWqhjg7c2UjVeteWTVdDX3Hrxzb/eDJtXfl6V7fPcmXz1dZjQZrsF2pk87O4cRus9N/SYC12cwsVA+HabGLO0Z1R";
+        //parameters.vuforiaLicenseKey = "AfgNWRP/////AAAAGTvgaD9NHEcegp9M9gVfWchUPuYO0sndvqbZcgtG8KGB6PCuQ3QWbV9b4twhV5fD/kl/3Iblwrmzj4Vw8DnXF6MS8PbHDXTMrzndAccgzFu+7cej0vmkb657jYHPtLz4Y7U5zIdyPHkbPz+9gRo9gtaUGBa3p8mezZd2qLlJNc4hcv1tcP4hRXsIPEf++0q7tVIco0JGNnd76A7G0REDE9/IKqaO32xvwPnPNS7C+NqcHdZjfRQMjy2FRWzfang2iz9z/Gu20FzSv2n3fhIEWWqhjg7c2UjVeteWTVdDX3Hrxzb/eDJtXfl6V7fPcmXz1dZjQZrsF2pk87O4cRus9N/SYC12cwsVA+HabGLO0Z1R";
+        //the above seems to be a valid license key, but isn't working for us.  Below is a license key that should work, for now.
+        parameters.vuforiaLicenseKey = "ASn2Q2X/////AAAAmWy7TkZhSkH/k6+L1MCWpKJ1tLk3g9Dofxu0JNcAheQ/Aiw6owMdtzkJ8BCHoVVu7ARo9w5C9BjOS8ezfrUdXoZkNv0Fei8tNM3dwXGkfkGws59nh2dPuYF3lWFuLXqy7dycyn/TR+A3ZvAVhvUKusxnEbF4MBFZf/9I6Om1VMjJqF7jtQI0t3Ppde67pUPuRZdWW0xRJdemgvCH0s5DopDX6DY3d0O6Yus6MHHWK0v9z0q9jCfuY/UyakR4stPpW+x67AwBRX3PdPE3fdffTnkCwCoifPIkFErqbDTh750ZkvLkDm1uPnXGSF4QAScML6FSDASm/KPT1RpMJyo5SbD5qpnY6g/siGMx1vefGqHT";
 
         /*
          * We also indicate which camera on the RC that we wish to use.
@@ -79,6 +71,16 @@ public abstract class GyroAutonomous extends GyroRobot {
         relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
 
+        if (startingPosition().isRed()) {
+
+            reverseDriveBase();
+        }
+    }
+
+    @Override
+    public void Init_Loop() {
+
+        super.Init_Loop();
         vuMark = RelicRecoveryVuMark.from(relicTemplate); //LEFT, CENTER, or RIGHT if read, UNKNOWN if undetermined reading
         telemetry.addData("vuMark", vuMark.toString()); //LEFT, CENTER, or RIGHT, useful for debugging
         telemetry.addData("Status", "init_loop");
@@ -90,8 +92,7 @@ public abstract class GyroAutonomous extends GyroRobot {
 
         super.Start();
         relicTrackables.activate();
-        jewelArmY.setPosition(0.65);
-        ElapsedTime elapsedTime = new ElapsedTime();
-        jewelArmY.setPosition(0.15);
+        //jewelArmY.setPosition(0.65);
+        //jewelArmY.setPosition(0.15);
     }
 }

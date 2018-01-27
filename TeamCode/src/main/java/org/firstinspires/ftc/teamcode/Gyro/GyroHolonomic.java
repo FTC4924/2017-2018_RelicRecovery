@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.util.Range;
 @Disabled
 @TeleOp(name = "GyroHolonomic", group = "Iterative Opmode")
 
-public class GyroHolonomic extends GyroRobot {
+public abstract class GyroHolonomic extends GyroRobot {
 
     @Override
     public void Init() {

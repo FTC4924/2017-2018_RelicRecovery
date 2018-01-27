@@ -94,4 +94,12 @@ public class GyroBlueFar extends GyroAutonomous {
             isFinished = true;
         }
     }
+
+    public void runOpMode() {
+        Init();
+        while (!opModeIsActive()) Init_Loop();
+        Start();
+        while (opModeIsActive()) Loop();
+        Stop();
+    }
 }
