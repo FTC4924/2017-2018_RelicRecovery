@@ -1,16 +1,15 @@
-package org.firstinspires.ftc.teamcode.Gyro;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.RobotPosition;
-
 /**
- * Created by 4924_Users on 1/5/2018.
+ * Created by 4924_Users on 11/4/2017.
  */
+
 @Disabled
-@Autonomous(name = "GyroRedFar")
-public class GyroRedFar extends GyroBlueFar {
+@Autonomous(name = "RedFar")
+public class RedFar extends BlueFar {
 
     public RobotPosition startingPosition() {
 
