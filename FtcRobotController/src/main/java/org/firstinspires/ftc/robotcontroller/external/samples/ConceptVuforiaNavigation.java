@@ -81,7 +81,7 @@ import java.util.List;
  */
 
 @Autonomous(name="Concept: Vuforia Navigation", group ="Concept")
-@Disabled
+
 public class ConceptVuforiaNavigation extends LinearOpMode {
 
     public static final String TAG = "Vuforia Navigation Sample";
@@ -117,7 +117,7 @@ public class ConceptVuforiaNavigation extends LinearOpMode {
          * Once you've obtained a license key, copy the string from the Vuforia web site
          * and paste it in to your code onthe next line, between the double quotes.
          */
-        parameters.vuforiaLicenseKey = "ATsODcD/////AAAAAVw2lR...d45oGpdljdOh5LuFB9nDNfckoxb8COxKSFX";
+        parameters.vuforiaLicenseKey = "ASn2Q2X/////AAAAmWy7TkZhSkH/k6+L1MCWpKJ1tLk3g9Dofxu0JNcAheQ/Aiw6owMdtzkJ8BCHoVVu7ARo9w5C9BjOS8ezfrUdXoZkNv0Fei8tNM3dwXGkfkGws59nh2dPuYF3lWFuLXqy7dycyn/TR+A3ZvAVhvUKusxnEbF4MBFZf/9I6Om1VMjJqF7jtQI0t3Ppde67pUPuRZdWW0xRJdemgvCH0s5DopDX6DY3d0O6Yus6MHHWK0v9z0q9jCfuY/UyakR4stPpW+x67AwBRX3PdPE3fdffTnkCwCoifPIkFErqbDTh750ZkvLkDm1uPnXGSF4QAScML6FSDASm/KPT1RpMJyo5SbD5qpnY6g/siGMx1vefGqHT";
 
         /*
          * We also indicate which camera on the RC that we wish to use.

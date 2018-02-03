@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Gyro;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -9,12 +10,9 @@ import org.firstinspires.ftc.teamcode.RobotPosition;
 /**
  * Created by 4924_Users on 1/5/2018.
  */
+@Disabled
 @Autonomous(name = "GyroBlueNear")
 public class GyroBlueNear extends GyroAutonomous {
-
-    static Servo armY = null;
-    static Servo armX = null;
-    ColorSensor sensorColor;
 
     public RobotPosition startingPosition() {
 
@@ -32,33 +30,28 @@ public class GyroBlueNear extends GyroAutonomous {
         super.Loop();
         if (elapsedTime.seconds() > 3 && !jewelDone) {
 
-            telemetry.addData("Red  ", sensorColor.red());
-            telemetry.addData("Green", sensorColor.green());
-            telemetry.addData("Blue ", sensorColor.blue());
-            telemetry.update();
-
-            if (sensorColor.red() > sensorColor.blue()) {
+            if (colorSensor.red() > colorSensor.blue()) {
 
                 if (startingPosition().isRed()) {
 
-                    armX.setPosition(0.3);
+                    jewelArmX.setPosition(0.3);
                     telemetry.addLine("Color Red; Kicking Blue; On my right");
                 } else {
 
-                    armX.setPosition(0.8);
+                    jewelArmX.setPosition(0.8);
                     telemetry.addLine("Color Red; Kicking Red; On my Left");
                 }
                 jewelDone = true;
                 telemetry.update();
-            } else if (sensorColor.blue() > sensorColor.red()) {
+            } else if (colorSensor.blue() > colorSensor.red()) {
 
                 if (startingPosition().isBlue()) {
 
-                    armX.setPosition(0.3);
+                    jewelArmX.setPosition(0.3);
                     telemetry.addLine("Color Blue; Kicking Red; On my right ");
                 } else {
 
-                    armX.setPosition(0.8);
+                    jewelArmX.setPosition(0.8);
                     telemetry.addLine("Color Blue; Kicking Blue; On my left");
                 }
 
@@ -75,8 +68,8 @@ public class GyroBlueNear extends GyroAutonomous {
 
         if (elapsedTime.seconds() > 5 && jewelDone) {
 
-            armX.setPosition(0.4);
-            armY.setPosition(0.65);
+            jewelArmX.setPosition(0.4);
+            jewelArmY.setPosition(0.65);
             startGlyph=true;
         }
 
@@ -98,4 +91,14 @@ public class GyroBlueNear extends GyroAutonomous {
             isFinished = true;
         }
     }
+
+    public void runOpMode() {
+        Init();
+        while (!opModeIsActive()) Init_Loop();
+        Start();
+        while (opModeIsActive()) Loop();
+        Stop();
+    }
+
 }
+
