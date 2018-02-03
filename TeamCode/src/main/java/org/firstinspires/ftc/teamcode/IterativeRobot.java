@@ -232,7 +232,14 @@ public abstract class IterativeRobot extends LinearOpMode {
 
     protected double getHeading() {
         updateGyro();
-        return (Double.parseDouble((formatAngle(angles.angleUnit, angles.firstAngle))) - offset);
+        return (format360(Double.parseDouble((formatAngle(angles.angleUnit, angles.firstAngle)))) - offset);
+    }
+
+    static double format360(double angle) {
+
+        angle %= 360;
+        if (Math.abs(angle) > 180) angle -= Math.signum(angle) * 360;
+        return angle;
     }
 
     String formatAngle(AngleUnit angleUnit, double angle) {
