@@ -180,7 +180,7 @@ public abstract class IterativeRobot extends LinearOpMode {
         //desiredHeading is the angle that we want to move to, it should be -180<x<180
         setMotorsModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER, DRIVE_BASE_MOTORS);
         //we reduce desiredHeading just in case it is formatted incorrectly
-        while (getHeading() - desiredHeading > GYRO_TURN_TOLERANCE_DEGREES) {
+        while ((getHeading() - desiredHeading > GYRO_TURN_TOLERANCE_DEGREES) && opModeIsActive()) {
 
             telemetry.addData("Heading", getHeading());
             telemetry.update();
@@ -188,7 +188,7 @@ public abstract class IterativeRobot extends LinearOpMode {
         }
         //if it is faster to turn CCW, then robot turns CCW
 
-        while (getHeading() - desiredHeading < -GYRO_TURN_TOLERANCE_DEGREES) {
+        while ((getHeading() - desiredHeading < -GYRO_TURN_TOLERANCE_DEGREES) && opModeIsActive()) {
 
             telemetry.addData("Heading", getHeading());
             telemetry.update();
@@ -221,13 +221,6 @@ public abstract class IterativeRobot extends LinearOpMode {
         setMotorsPowers(0, DRIVE_BASE_MOTORS);
 
         setMotorsModes(DcMotor.RunMode.RUN_USING_ENCODER, DRIVE_BASE_MOTORS);
-    }
-
-    static double formatAngle(double angle) {
-
-        angle %= 360;
-        if (Math.abs(angle) > 180) angle -= Math.signum(angle) * 360;
-        return angle;
     }
 
     protected double getHeading() {

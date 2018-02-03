@@ -155,8 +155,8 @@ public class IterativeBlueFar extends IterativeRobot {
         waitForStart();
         elapsedTime.reset();
 
-        armY.setPosition(0.65);
-        armY.setPosition(0.15);
+        armY.setPosition(0.75);
+        armY.setPosition(0.25);
 
         boolean isFinished = false;
         boolean startGlyph = false;
@@ -166,7 +166,7 @@ public class IterativeBlueFar extends IterativeRobot {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             telemetry.addData("vuMark", vuMark.toString());
             telemetry.update();
-            /*
+
             if (elapsedTime.seconds() > 3 && !jewelDone) {
 
                 if (sensorColor.red() > sensorColor.blue()) {
@@ -208,21 +208,23 @@ public class IterativeBlueFar extends IterativeRobot {
             if (elapsedTime.seconds() > 5 && jewelDone) {
 
                 armX.setPosition(0.4);
-                armY.setPosition(0.65);
+                armY.setPosition(0.75);
                 startGlyph=true;
-            }*/
-            if (!isFinished) {
+            }
+            if (!isFinished && startGlyph) {
 
-                driveWithEncoders(DRIVE_POWER, 26);
+                if (startingPosition().isBlue()) driveWithEncoders(DRIVE_POWER, 26);
+                else { driveWithEncoders(DRIVE_POWER, 22); }
+                if (startingPosition().isRed()) reverseDriveBase();
                 turnToPosition(TURN_POWER, -90);
                 driveWithEncoders(DRIVE_POWER, calculateInches());
                 if (startingPosition().isRed()) reverseDriveBase();
                 turnToPosition(TURN_POWER,0);
                 elapsedTime.reset();
-                while ((elapsedTime.time() < 5) && opModeIsActive()) collectionMotor.setPower(-1);
+                while ((elapsedTime.time() < 3) && opModeIsActive()) collectionMotor.setPower(-1);
                 collectionMotor.setPower(0);
                 elapsedTime.reset();
-                while ((elapsedTime.time() < 1) && opModeIsActive()) setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
+                while ((elapsedTime.time() < 2) && opModeIsActive()) setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
                 driveWithEncoders(DRIVE_POWER, -5);
                 setMotorsPowers(0, DRIVE_BASE_MOTORS);
                 isFinished = true;

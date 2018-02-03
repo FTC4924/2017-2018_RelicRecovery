@@ -121,8 +121,8 @@ public class ColorTeleOp extends OpMode {
         runtime.reset();
     }
 
-    double x = 0.35;
-    double y = 0.65;
+    double x = 0.36;
+    double y = 0.76;
     static double alignment = 1;
     boolean leftTriggerPressed = false;
 

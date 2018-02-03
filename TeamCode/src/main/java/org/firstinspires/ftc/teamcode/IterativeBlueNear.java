@@ -157,8 +157,8 @@ public class IterativeBlueNear extends IterativeRobot {
         waitForStart();
         elapsedTime.reset();
 
-        armY.setPosition(0.65);
-        armY.setPosition(0.15);
+        armY.setPosition(0.75);
+        armY.setPosition(0.25);
 
         boolean isFinished = false;
         boolean startGlyph = false;
@@ -168,7 +168,7 @@ public class IterativeBlueNear extends IterativeRobot {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             telemetry.addData("vuMark", vuMark.toString());
             telemetry.update();
-            /*
+
             if (elapsedTime.seconds() > 3 && !jewelDone) {
 
                 if (sensorColor.red() > sensorColor.blue()) {
@@ -210,9 +210,9 @@ public class IterativeBlueNear extends IterativeRobot {
             if (elapsedTime.seconds() > 5 && jewelDone) {
 
                 armX.setPosition(0.4);
-                armY.setPosition(0.65);
+                armY.setPosition(0.75);
                 startGlyph=true;
-            }*/
+            }
             if (!isFinished) {
                 driveWithEncoders(DRIVE_POWER, 22);
                 driveWithEncoders(DRIVE_POWER, calculateInches());
