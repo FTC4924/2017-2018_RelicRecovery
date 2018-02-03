@@ -168,7 +168,9 @@ public class ColorTeleOp extends OpMode {
         boolean slowSpeed = gamepad1.left_bumper;
         //slowSpeed says whether or not the driver wants to go at a slower speed, which can cause
         // finer adjustments
-        double elbow = gamepad1.right_stick_y * 0.83;
+        double elbow = gamepad1.right_stick_y;
+        if (elbow>0) elbow = 0.83;
+        else if (elbow <0) elbow = -0.83;
         //elbow is a variable set to the amount of power the driver wants to give to move this servo
         double clawPower = -gamepad2.right_stick_y;
         //clawPower is a variable set to the amount of power the driver wants to give to move
