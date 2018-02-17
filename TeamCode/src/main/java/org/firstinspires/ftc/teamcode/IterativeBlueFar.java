@@ -155,8 +155,8 @@ public class IterativeBlueFar extends IterativeRobot {
         waitForStart();
         elapsedTime.reset();
 
-        armY.setPosition(0.75);
-        armY.setPosition(0.25);
+        armY.setPosition(0.56);
+        armY.setPosition(0.29);
 
         boolean isFinished = false;
         boolean startGlyph = false;
@@ -173,29 +173,27 @@ public class IterativeBlueFar extends IterativeRobot {
 
                     if (startingPosition().isRed()) {
 
-                        armX.setPosition(0.3);
                         telemetry.addLine("Color Red; Kicking Blue; On my right");
+                        armX.setPosition(0.3);
                     } else {
 
-                        armX.setPosition(0.8);
                         telemetry.addLine("Color Red; Kicking Red; On my Left");
+                        armX.setPosition(0.6);//0.8
                     }
                     jewelDone = true;
-                    telemetry.update();
                 } else if (sensorColor.blue() > sensorColor.red()) {
 
                     if (startingPosition().isBlue()) {
 
-                        armX.setPosition(0.3);
                         telemetry.addLine("Color Blue; Kicking Red; On my right ");
+                        armX.setPosition(0.3);
                     } else {
 
-                        armX.setPosition(0.8);
                         telemetry.addLine("Color Blue; Kicking Blue; On my left");
+                        armX.setPosition(0.6);
                     }
 
                     jewelDone = true;
-                    telemetry.update();
 
                 } else {
 
@@ -205,10 +203,9 @@ public class IterativeBlueFar extends IterativeRobot {
                 }
             }
 
-            if (elapsedTime.seconds() > 5 && jewelDone) {
-
-                armX.setPosition(0.4);
-                armY.setPosition(0.75);
+            if (elapsedTime.seconds() > 5 && jewelDone && !startGlyph) {
+                armY.setPosition(0.56);//65
+                armX.setPosition(0.35);
                 startGlyph=true;
             }
             if (!isFinished && startGlyph) {
@@ -224,7 +221,9 @@ public class IterativeBlueFar extends IterativeRobot {
                 while ((elapsedTime.time() < 3) && opModeIsActive()) collectionMotor.setPower(-1);
                 collectionMotor.setPower(0);
                 elapsedTime.reset();
+                if (startingPosition().isRed()) reverseDriveBase();
                 while ((elapsedTime.time() < 2) && opModeIsActive()) setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
+                if (startingPosition().isRed()) reverseDriveBase();
                 driveWithEncoders(DRIVE_POWER, -5);
                 setMotorsPowers(0, DRIVE_BASE_MOTORS);
                 isFinished = true;

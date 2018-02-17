@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.NaiveAccelerationIntegrator;
@@ -19,7 +19,7 @@ import java.util.Locale;
 
 /**
  * Created by 4924_Users on 1/20/2018.
- */
+ *//*
 @Disabled
 @Autonomous(name="GyroTestOneHub")
 public class GyroTestOneHub extends LinearOpMode {
@@ -101,4 +101,4 @@ public class GyroTestOneHub extends LinearOpMode {
     }
 
 
-}
+}*/
