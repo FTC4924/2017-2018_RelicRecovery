@@ -56,13 +56,15 @@ public class ColorTeleOp extends OpMode {
     private Servo armY = null;
     private Servo armX = null;
     private Servo alignmentDevice = null;
-    /*
 
-     * Code to run ONCE when the driver hits INIT
+    /*
+     Code to run ONCE when the driver hits INIT
      */
+
+    boolean leftBumperPressedBefore = false;
+
     @Override
     public void init() {
-        final double STARTPOSITION180 = 1.0;
         telemetry.addData("Status", "Initialized");
 
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -92,10 +94,8 @@ public class ColorTeleOp extends OpMode {
         relicExtension.setDirection(DcMotor.Direction.FORWARD);
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
         //Set the 180 servos to their middle position
-        barServo.setPosition(STARTPOSITION180);
         //armX.setPosition(0.4);
         //armY.setPosition(0.65);
-        alignmentDevice.setPosition(1);
         //Set the continous servos to a neutral power, to make sure they do not move while
         // initiallizing
         clawServo.setPower(0);
@@ -121,8 +121,8 @@ public class ColorTeleOp extends OpMode {
         runtime.reset();
     }
 
-    double x = 0.4;
-    double y = 0.75;
+    double x;
+    double y;
     static double alignment = 1;
     boolean leftTriggerPressed = false;
 
@@ -134,8 +134,8 @@ public class ColorTeleOp extends OpMode {
         //We initialize and give certain values to certain variables, so that we can use them later
         double collectionPower = 0.0;
         double deliveryPower = 0.0;
-        final double BARMOVE = -1.0;
-        final double BARDOWN = 1.0;
+        final double BARMOVE = -0.6;
+        final double BARDOWN = 0.8;
         double servoStep = 0.02;
 
         //we set what to do when the motor is not given power, which is to brake completely,
@@ -168,9 +168,7 @@ public class ColorTeleOp extends OpMode {
         boolean slowSpeed = gamepad1.left_bumper;
         //slowSpeed says whether or not the driver wants to go at a slower speed, which can cause
         // finer adjustments
-        double elbow = gamepad1.right_stick_y;
-        if (elbow>0) elbow = 0.83;
-        else if (elbow <0) elbow = -0.83;
+        double elbow = gamepad1.right_stick_y * 0.83;
         //elbow is a variable set to the amount of power the driver wants to give to move this servo
         double clawPower = -gamepad2.right_stick_y;
         //clawPower is a variable set to the amount of power the driver wants to give to move
@@ -188,10 +186,14 @@ public class ColorTeleOp extends OpMode {
         if (gamepad2.left_bumper) {
             //if the driver hits the left bumper, that signals that the driver wants to make
             // the kicker go up, and kick the block up
-            barServo.setPosition(BARDOWN + BARMOVE);
-        } else {
+            barServo.setPosition(0.2);
+            leftBumperPressedBefore = true;
+
+        } else if (leftBumperPressedBefore) {
             //If the driver does not press this button, we let the kicker fall down
-            barServo.setPosition(BARDOWN);
+            barServo.setPosition(0.8);
+            leftBumperPressedBefore = false;
+
         }
 
         if (gamepad2.left_trigger > 0) {
@@ -201,25 +203,26 @@ public class ColorTeleOp extends OpMode {
         }
 
         if (gamepad2.dpad_up && !leftTriggerPressed) {
-            deliveryPower = 1;
+            deliveryPower = -1;
         }
         if(!leftTriggerPressed && gamepad2.dpad_down) {
-            deliveryPower = -1;
+            deliveryPower = 1;
         }
 
         if (gamepad2.dpad_up && leftTriggerPressed) {
-            y += servoStep;
+            if(y + servoStep < 1) y += servoStep;
         }
         if(leftTriggerPressed && gamepad2.dpad_down) {
-           y -= servoStep;
+            if(y - servoStep > 0) y -= servoStep;
         }
+
 
 
         if (gamepad2.dpad_left && leftTriggerPressed) {
-             x += servoStep;
+            if(x + servoStep < 1) x += servoStep;
         }
         if (gamepad2.dpad_right && leftTriggerPressed){
-            x -= servoStep;
+            if(x - servoStep > 0) x -= servoStep;
         }
 
         //This is temporary debugging code
@@ -275,14 +278,15 @@ public class ColorTeleOp extends OpMode {
         elbowServo.setPower(elbow);
         clawServo.setPower(clawPower);
         alignmentDevice.setPosition(alignment);
-        armX.setPosition(x);
-        armY.setPosition(y);
-
+        if (leftTriggerPressed) {
+            armX.setPosition(x);
+            armY.setPosition(y);
+        }
 
         // Show the elapsed game time
         telemetry.addData("Elbow Power", elbow);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Position in Y-Axis", y);
+        telemetry.addData("Position i-n Y-Axis", y);
         telemetry.addData("Position in X-Axis", x);
         telemetry.addData("Alignment Device Position", alignment);
        //we make the turn values 0, so that the robot will stop turning
