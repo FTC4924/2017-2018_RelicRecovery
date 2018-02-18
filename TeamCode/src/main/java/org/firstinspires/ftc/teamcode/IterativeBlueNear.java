@@ -158,7 +158,7 @@ public class IterativeBlueNear extends IterativeRobot {
         elapsedTime.reset();
 
         armY.setPosition(0.56);//65
-        armY.setPosition(0.29);//25
+        armY.setPosition(0.275);//25
 
         boolean isFinished = false;
         boolean startGlyph = false;
@@ -211,7 +211,7 @@ public class IterativeBlueNear extends IterativeRobot {
                 startGlyph=true;
             }
             if (!isFinished && startGlyph) {
-                if (startingPosition().isRed()) driveWithEncoders(DRIVE_POWER, 14);
+                if (startingPosition().isRed()) driveWithEncoders(DRIVE_POWER, 11);
                 else { driveWithEncoders(DRIVE_POWER, 22);}
                 driveWithEncoders(DRIVE_POWER, calculateInches());
                 if (startingPosition().isRed()) reverseDriveBase();

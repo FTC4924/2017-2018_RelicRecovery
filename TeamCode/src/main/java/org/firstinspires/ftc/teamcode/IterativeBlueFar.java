@@ -202,7 +202,7 @@ public class IterativeBlueFar extends IterativeRobot {
                     telemetry.update();
                 }
             }
-
+            telemetry.update();
             if (elapsedTime.seconds() > 5 && jewelDone && !startGlyph) {
                 armY.setPosition(0.56);//65
                 armX.setPosition(0.35);
