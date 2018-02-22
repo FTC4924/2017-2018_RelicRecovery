@@ -123,8 +123,11 @@ public class ColorTeleOp extends OpMode {
 
     double x;
     double y;
-    static double alignment = 1;
+    static double alignment = 0.8;
     boolean leftTriggerPressed = false;
+    //barServo;
+
+
 
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
@@ -233,11 +236,11 @@ public class ColorTeleOp extends OpMode {
         }
 
         if (gamepad1.dpad_left) {
-            alignment = 0.5;
+            alignment = 0.2;
         } else if(gamepad1.dpad_up){
-            if(alignment - servoStep > 0) alignment -= servoStep;
+            if(alignment - servoStep > 0.2) alignment -= servoStep;
         } else if(gamepad1.dpad_down) {
-            if(alignment + servoStep < 1) alignment += servoStep;
+            if(alignment + servoStep < 0.8) alignment += servoStep;
         }
 
 
@@ -277,7 +280,7 @@ public class ColorTeleOp extends OpMode {
         deliveryMotor.setPower(deliveryPower);
         elbowServo.setPower(elbow);
         clawServo.setPower(clawPower);
-        alignmentDevice.setPosition(alignment);
+        if (gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_down) alignmentDevice.setPosition(alignment);
         if (leftTriggerPressed) {
             armX.setPosition(x);
             armY.setPosition(y);
