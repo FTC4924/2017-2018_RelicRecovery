@@ -171,7 +171,7 @@ public class IterativeBlueNear extends IterativeRobot {
 
             if (elapsedTime.seconds() > 3 && !jewelDone) {
 
-                if (sensorColor.red() > sensorColor.blue()) {
+                if (sensorColor.red() > (sensorColor.blue() + 5)) {
 
                     if (startingPosition().isRed()) {
 
@@ -183,7 +183,7 @@ public class IterativeBlueNear extends IterativeRobot {
                         armX.setPosition(0.6);//0.8
                     }
                     jewelDone = true;
-                } else if (sensorColor.blue() > sensorColor.red()) {
+                } else if ((sensorColor.blue() + 5) > sensorColor.red()) {
 
                     if (startingPosition().isBlue()) {
 

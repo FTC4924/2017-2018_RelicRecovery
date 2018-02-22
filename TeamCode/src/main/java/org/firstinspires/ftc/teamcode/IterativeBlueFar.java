@@ -119,7 +119,7 @@ public class IterativeBlueFar extends IterativeRobot {
         }
         {
 
-            CRYPTOBOX_CENTER_DISTANCE = 12.5;
+            CRYPTOBOX_CENTER_DISTANCE = 11.5;
         }
 
         {
@@ -169,7 +169,7 @@ public class IterativeBlueFar extends IterativeRobot {
 
             if (elapsedTime.seconds() > 3 && !jewelDone) {
 
-                if (sensorColor.red() > sensorColor.blue()) {
+                if (sensorColor.red() > (sensorColor.blue() + 5)) {
 
                     if (startingPosition().isRed()) {
 
@@ -181,7 +181,7 @@ public class IterativeBlueFar extends IterativeRobot {
                         armX.setPosition(0.6);//0.8
                     }
                     jewelDone = true;
-                } else if (sensorColor.blue() > sensorColor.red()) {
+                } else if ((sensorColor.blue() + 5) > sensorColor.red()) {
 
                     if (startingPosition().isBlue()) {
 
@@ -211,7 +211,7 @@ public class IterativeBlueFar extends IterativeRobot {
             if (!isFinished && startGlyph) {
 
                 if (startingPosition().isBlue()) driveWithEncoders(DRIVE_POWER, 26);
-                else { driveWithEncoders(DRIVE_POWER, 22); }
+                else { driveWithEncoders(DRIVE_POWER, 17); }
                 if (startingPosition().isRed()) reverseDriveBase();
                 turnToPosition(TURN_POWER, -90);
                 driveWithEncoders(DRIVE_POWER, calculateInches());
