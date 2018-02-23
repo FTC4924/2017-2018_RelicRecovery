@@ -13,10 +13,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 /**
- * Created by 4924_Users on 1/27/2018.
+ * Created by 4924_Users on 2/23/2018.
  */
-@Autonomous(name = "BlueFar")
-public class IterativeBlueFar extends IterativeRobot {
+@Autonomous(name="RedFar")
+public class RedFarIndividualClass extends IterativeRobot {
 
     static Servo armY = null;
     static Servo armX = null;
@@ -25,7 +25,7 @@ public class IterativeBlueFar extends IterativeRobot {
 
     public RobotPosition startingPosition() {
 
-        return RobotPosition.BLUE_NEAR;
+        return RobotPosition.RED_FAR;
     }
 
     public boolean isAutonomous() {
@@ -65,12 +65,6 @@ public class IterativeBlueFar extends IterativeRobot {
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        //on the red board, the robot will be facing backwards, so we want to reverse the motors
-        if (startingPosition().isRed()) {
-
-            reverseDriveBase();
-        }
 
         //we want the motors' encoders to be set to 0 when robot is initialized
         frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -119,7 +113,7 @@ public class IterativeBlueFar extends IterativeRobot {
         }
         {
 
-            CRYPTOBOX_CENTER_DISTANCE = 12.5;
+            CRYPTOBOX_CENTER_DISTANCE = -8.5;
         }
 
         {
@@ -136,8 +130,8 @@ public class IterativeBlueFar extends IterativeRobot {
                 }
             } else { //STARTING_POSITION.isFar()
 
-                CRYPTOBOX_LEFT_DISTANCE = -1;
-                CRYPTOBOX_RIGHT_DISTANCE = -1;
+                CRYPTOBOX_LEFT_DISTANCE = 7.5;
+                CRYPTOBOX_RIGHT_DISTANCE = 9.5;
             }
         }
 
@@ -210,21 +204,18 @@ public class IterativeBlueFar extends IterativeRobot {
             }
             if (!isFinished && startGlyph) {
 
-                if (startingPosition().isBlue()) driveWithEncoders(DRIVE_POWER, 26);
-                else { driveWithEncoders(DRIVE_POWER, 17); }
-                if (startingPosition().isRed()) reverseDriveBase();
-                turnToPosition(TURN_POWER, -90);
-                driveWithEncoders(DRIVE_POWER, calculateInches());
-                if (startingPosition().isRed()) reverseDriveBase();
-                turnToPosition(TURN_POWER,0);
+
+                driveWithEncoders(DRIVE_POWER, -17);
+                turnToPosition(TURN_POWER, 90);
+                driveWithEncoders(DRIVE_POWER, -calculateInches());
+                turnToPosition(TURN_POWER,180);
                 elapsedTime.reset();
                 while ((elapsedTime.time() < 3) && opModeIsActive()) collectionMotor.setPower(-1);
-                collectionMotor.setPower(-0.25);
+                collectionMotor.setPower(-0.15);
                 elapsedTime.reset();
-                if (startingPosition().isRed()) reverseDriveBase();
                 while ((elapsedTime.time() < 2) && opModeIsActive()) setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
                 if (startingPosition().isRed()) reverseDriveBase();
-                driveWithEncoders(DRIVE_POWER, -5);
+                driveWithEncoders(DRIVE_POWER, 5);
                 collectionMotor.setPower(0);
                 setMotorsPowers(0, DRIVE_BASE_MOTORS);
                 isFinished = true;
