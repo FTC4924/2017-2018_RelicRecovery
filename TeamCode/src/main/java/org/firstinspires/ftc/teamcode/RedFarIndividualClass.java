@@ -113,7 +113,7 @@ public class RedFarIndividualClass extends IterativeRobot {
         }
         {
 
-            CRYPTOBOX_CENTER_DISTANCE = -8.5;
+            CRYPTOBOX_CENTER_DISTANCE = 8;
         }
 
         {
@@ -130,8 +130,8 @@ public class RedFarIndividualClass extends IterativeRobot {
                 }
             } else { //STARTING_POSITION.isFar()
 
-                CRYPTOBOX_LEFT_DISTANCE = 7.5;
-                CRYPTOBOX_RIGHT_DISTANCE = 9.5;
+                CRYPTOBOX_LEFT_DISTANCE = 11;
+                CRYPTOBOX_RIGHT_DISTANCE = 5;
             }
         }
 
@@ -211,7 +211,7 @@ public class RedFarIndividualClass extends IterativeRobot {
                 turnToPosition(TURN_POWER,180);
                 elapsedTime.reset();
                 while ((elapsedTime.time() < 3) && opModeIsActive()) collectionMotor.setPower(-1);
-                collectionMotor.setPower(-0.15);
+                collectionMotor.setPower(-0.25);
                 elapsedTime.reset();
                 while ((elapsedTime.time() < 2) && opModeIsActive()) setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
                 if (startingPosition().isRed()) reverseDriveBase();
