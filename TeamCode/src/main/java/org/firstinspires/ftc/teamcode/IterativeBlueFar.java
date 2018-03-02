@@ -119,7 +119,7 @@ public class IterativeBlueFar extends IterativeRobot {
         }
         {
 
-            CRYPTOBOX_CENTER_DISTANCE = 12.5;
+            CRYPTOBOX_CENTER_DISTANCE = 15;
         }
 
         {
@@ -128,7 +128,7 @@ public class IterativeBlueFar extends IterativeRobot {
                 if (STARTING_POSITION.isBlue()) { //cryptobox is reversed when colors change
 
                     CRYPTOBOX_LEFT_DISTANCE = CRYPTOBOX_CENTER_DISTANCE - CRYPTOBOX_OFFSET;
-                    CRYPTOBOX_RIGHT_DISTANCE = CRYPTOBOX_CENTER_DISTANCE + CRYPTOBOX_OFFSET;
+                    CRYPTOBOX_RIGHT_DISTANCE = CRYPTOBOX_CENTER_DISTANCE + CRYPTOBOX_OFFSET-2.5;
                 } else {
 
                     CRYPTOBOX_LEFT_DISTANCE = CRYPTOBOX_CENTER_DISTANCE + CRYPTOBOX_OFFSET;
@@ -210,7 +210,7 @@ public class IterativeBlueFar extends IterativeRobot {
             }
             if (!isFinished && startGlyph) {
 
-                if (startingPosition().isBlue()) driveWithEncoders(DRIVE_POWER, 26);
+                if (startingPosition().isBlue()) driveWithEncoders(DRIVE_POWER, 28);
                 else { driveWithEncoders(DRIVE_POWER, 17); }
                 if (startingPosition().isRed()) reverseDriveBase();
                 turnToPosition(TURN_POWER, -90);
@@ -219,14 +219,17 @@ public class IterativeBlueFar extends IterativeRobot {
                 turnToPosition(TURN_POWER,0);
                 elapsedTime.reset();
                 while ((elapsedTime.time() < 3) && opModeIsActive()) collectionMotor.setPower(-1);
-                collectionMotor.setPower(-0.25);
+                collectionMotor.setPower(-0.5);
                 elapsedTime.reset();
                 if (startingPosition().isRed()) reverseDriveBase();
                 while ((elapsedTime.time() < 2) && opModeIsActive()) setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
+                collectionMotor.setPower(-0.6);
                 if (startingPosition().isRed()) reverseDriveBase();
                 driveWithEncoders(DRIVE_POWER, -5);
-                collectionMotor.setPower(0);
+                elapsedTime.reset();
+                while ((elapsedTime.time() < 3) && opModeIsActive()) collectionMotor.setPower(-0.6);
                 setMotorsPowers(0, DRIVE_BASE_MOTORS);
+                collectionMotor.setPower(0);
                 isFinished = true;
             }
         }

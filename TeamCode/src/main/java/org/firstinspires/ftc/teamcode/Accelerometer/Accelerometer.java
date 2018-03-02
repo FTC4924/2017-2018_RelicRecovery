@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Accelerometer;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -14,6 +15,7 @@ import static java.lang.Math.*;
  * Created by user6 on 12/9/2017.
  */
 
+@Disabled
 @Autonomous(name="position sensing test")
 public class Accelerometer extends AccelerometerRobot {
 

@@ -36,7 +36,7 @@ public abstract class IterativeRobot extends LinearOpMode {
     /* FIELD PARAMETERS *///commit_file
 
     protected static final double DRIVE_POWER = 0.4;
-    protected static final double TURN_POWER = 0.35;
+    protected static final double TURN_POWER = 0.5;
     //to center of cryptobox
     protected static final double CRYPTOBOX_OFFSET = 7.5; //offset of left/right areas of cryptobox
     /* ROBOT CONSTANTS*/

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Accelerometer;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
  * Created by 4924_Users on 12/16/2017.
  */
 
+@Disabled
 @Autonomous(name="AccelerometerTest")
 public class AccelerometerTest extends Accelerometer {
 
