@@ -47,7 +47,8 @@ public class ColorTeleOp extends OpMode {
     private DcMotor frontRightMotor = null;
     private DcMotor backLeftMotor = null;
     private DcMotor backRightMotor = null;
-    private DcMotor collectionMotor = null;
+    private DcMotor collectionLeft = null;
+    private DcMotor collectionRight = null;
     private DcMotor relicExtension = null;
     private DcMotor deliveryMotor = null;
     private Servo barServo = null;
@@ -74,7 +75,8 @@ public class ColorTeleOp extends OpMode {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
-        collectionMotor = hardwareMap.get(DcMotor.class, "leftCollectionMotor");
+        collectionLeft = hardwareMap.get(DcMotor.class, "collectionLeft");
+        collectionRight = hardwareMap.get(DcMotor.class, "collectionRight");
         relicExtension = hardwareMap.get(DcMotor.class, "relicExtension");
         deliveryMotor = hardwareMap.get(DcMotor.class, "deliveryMotor");
         barServo = hardwareMap.get(Servo.class, "barServo");
@@ -90,7 +92,8 @@ public class ColorTeleOp extends OpMode {
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        collectionMotor.setDirection(DcMotor.Direction.FORWARD);
+        collectionLeft.setDirection(DcMotor.Direction.REVERSE);
+        collectionRight.setDirection(DcMotor.Direction.FORWARD);
         relicExtension.setDirection(DcMotor.Direction.FORWARD);
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
         //Set the 180 servos to their middle position
@@ -275,7 +278,8 @@ public class ColorTeleOp extends OpMode {
         frontRightMotor.setPower(frontRightPower);
         backLeftMotor.setPower(backLeftPower);
         backRightMotor.setPower(backRightPower);
-        collectionMotor.setPower(collectionPower);
+        collectionLeft.setPower(collectionPower);
+        collectionRight.setPower(collectionPower);
         relicExtension.setPower(linearSlide);
         deliveryMotor.setPower(deliveryPower);
         elbowServo.setPower(elbow);
@@ -308,7 +312,8 @@ public class ColorTeleOp extends OpMode {
         frontRightMotor.setPower(0);
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
-        collectionMotor.setPower(0);
+        collectionLeft.setPower(0);
+        collectionRight.setPower(0);
         relicExtension.setPower(0);
         deliveryMotor.setPower(0);
         elbowServo.setPower(0);
