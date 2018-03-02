@@ -22,6 +22,7 @@ public class IterativeBlueNear extends IterativeRobot {
     static Servo armY = null;
     static Servo armX = null;
     ColorSensor sensorColor;
+    ColorSensor boardReader;
 
 
     public RobotPosition startingPosition() {
@@ -43,11 +44,13 @@ public class IterativeBlueNear extends IterativeRobot {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
-        leftCollectionMotor = hardwareMap.get(DcMotor.class, "leftCollectionMotor");
+        leftCollectionMotor = hardwareMap.get(DcMotor.class, "collectionLeft");
+        rightCollectionMotor = hardwareMap.get(DcMotor.class, "collectionRight");
         relicExtension = hardwareMap.get(DcMotor.class, "relicExtension");
         deliveryMotor = hardwareMap.get(DcMotor.class, "deliveryMotor");
         elbowServo = hardwareMap.get(CRServo.class, "elbowServo");
         sensorColor = hardwareMap.get(ColorSensor.class, "color");
+        boardReader = hardwareMap.get(ColorSensor.class, "boardReader");
         armY = hardwareMap.get(Servo.class, "armY");
         armX = hardwareMap.get(Servo.class, "armX");
 
@@ -103,7 +106,7 @@ public class IterativeBlueNear extends IterativeRobot {
         }
 
         if (isAutonomous()) { //below is Autonomous-only code, this removes unnecessary loading
-
+            checkBoardColor(boardReader, startingPosition());
             vuforiaParameters.vuforiaLicenseKey = "AdDqKyD/////AAAAGQ/rpKTVlUiMmdwxDFRT5LiD8kI3QucN9xL8BbQRw/rYsleEjKBm/GOQB4GnSmvyzTFNFOBfZQ9o06uen5gYZvJthDx8OSVm78QegaFqHEGPjDRtqIAuLxz+12HVQXbIutqXfR595SNIl0yKUbbXFTq21ElXEDDNwO0Lv8ptnJPLib85+omkc5c8xfG6oNIhFg+sPIfCrpFACHdrr23MpY8AzLHiYleHnhpyY/y/IqsXw7CYPV2kKY70GEwH8I0MGxBw8tw8EoYpXk4vxUzHAPfgvBDztFz3x9fpcxoeqb0jl2L7GB7Aq7u+Sea+g4FoTG/9FD4rEy4I/Lz+OjdbE2eEUCGnyy10Q5o3AGG5R3cW";
             //license key set, necessary for vuforia code to be used
             vuforiaParameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT; //uses front camera of Robot Controller for detection
@@ -117,6 +120,7 @@ public class IterativeBlueNear extends IterativeRobot {
             relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
             relicTemplate = relicTrackables.get(0);
             relicTrackables.activate(); //start listening for camera's data
+
         }
         {
 

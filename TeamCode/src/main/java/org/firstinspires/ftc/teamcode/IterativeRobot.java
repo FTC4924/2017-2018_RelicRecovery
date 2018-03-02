@@ -151,6 +151,18 @@ public abstract class IterativeRobot extends LinearOpMode {
             d.setPower(power);
     }
 
+    protected void checkBoardColor(ColorSensor sensorColor, RobotPosition boardColor){
+
+        if (boardColor.isRed()) {
+
+            if (sensorColor.red() < sensorColor.blue()) telemetry.addData("WARNING: WRONG BOARD COLOR", sensorColor.red());
+        }
+        else {
+
+            if (sensorColor.blue() < sensorColor.red()) telemetry.addData("WARNING: WRONG BOARD COLOR", sensorColor.blue());
+        }
+    }
+
     protected void setCollectionPower(double power){
 
         leftCollectionMotor.setPower(power);
