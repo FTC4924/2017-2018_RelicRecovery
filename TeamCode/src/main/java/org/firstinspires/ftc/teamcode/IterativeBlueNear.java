@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
@@ -44,7 +43,7 @@ public class IterativeBlueNear extends IterativeRobot {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
-        collectionMotor = hardwareMap.get(DcMotor.class, "collectionMotor");
+        leftCollectionMotor = hardwareMap.get(DcMotor.class, "leftCollectionMotor");
         relicExtension = hardwareMap.get(DcMotor.class, "relicExtension");
         deliveryMotor = hardwareMap.get(DcMotor.class, "deliveryMotor");
         elbowServo = hardwareMap.get(CRServo.class, "elbowServo");
@@ -59,7 +58,7 @@ public class IterativeBlueNear extends IterativeRobot {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        collectionMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftCollectionMotor.setDirection(DcMotor.Direction.FORWARD);
         relicExtension.setDirection(DcMotor.Direction.FORWARD);
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
 
@@ -218,8 +217,8 @@ public class IterativeBlueNear extends IterativeRobot {
                 turnToPosition(TURN_POWER, 90);
                 driveWithEncoders(DRIVE_POWER, 3);
                 elapsedTime.reset();
-                while ((elapsedTime.time() < 5) && opModeIsActive()) collectionMotor.setPower(-1);
-                collectionMotor.setPower(0);
+                while ((elapsedTime.time() < 5) && opModeIsActive()) leftCollectionMotor.setPower(-1);
+                leftCollectionMotor.setPower(0);
                 elapsedTime.reset();
                 while ((elapsedTime.time() < 1) && opModeIsActive()) {
                     setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);

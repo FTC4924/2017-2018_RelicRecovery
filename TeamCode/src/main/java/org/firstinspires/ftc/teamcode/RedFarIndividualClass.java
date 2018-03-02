@@ -42,7 +42,8 @@ public class RedFarIndividualClass extends IterativeRobot {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
-        collectionMotor = hardwareMap.get(DcMotor.class, "collectionMotor");
+        leftCollectionMotor = hardwareMap.get(DcMotor.class, "leftCollectionMotor");
+        rightCollectionMotor = hardwareMap.get(DcMotor.class, "rightCollectionMotor");
         relicExtension = hardwareMap.get(DcMotor.class, "relicExtension");
         deliveryMotor = hardwareMap.get(DcMotor.class, "deliveryMotor");
         elbowServo = hardwareMap.get(CRServo.class, "elbowServo");
@@ -57,7 +58,8 @@ public class RedFarIndividualClass extends IterativeRobot {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        collectionMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftCollectionMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightCollectionMotor.setDirection(DcMotor.Direction.FORWARD);
         relicExtension.setDirection(DcMotor.Direction.FORWARD);
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
 
@@ -211,13 +213,13 @@ public class RedFarIndividualClass extends IterativeRobot {
                 driveWithEncoders(DRIVE_POWER, -calculateInches());
                 turnToPosition(TURN_POWER,180);
                 elapsedTime.reset();
-                while ((elapsedTime.time() < 3) && opModeIsActive()) collectionMotor.setPower(-1);
-                collectionMotor.setPower(0);
+                while ((elapsedTime.time() < 3) && opModeIsActive()) setCollectionPower(-1);
+                setCollectionPower(0);
                 elapsedTime.reset();
                 while ((elapsedTime.time() < 2) && opModeIsActive()) setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
-                collectionMotor.setPower(-0.5);
+                setCollectionPower(-0.5);
                 driveWithEncoders(DRIVE_POWER, -5);
-                collectionMotor.setPower(0);
+                setCollectionPower(0);
                 setMotorsPowers(0, DRIVE_BASE_MOTORS);
                 isFinished = true;
             }

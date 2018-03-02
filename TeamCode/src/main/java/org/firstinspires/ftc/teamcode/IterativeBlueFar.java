@@ -42,7 +42,7 @@ public class IterativeBlueFar extends IterativeRobot {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
-        collectionMotor = hardwareMap.get(DcMotor.class, "collectionMotor");
+        leftCollectionMotor = hardwareMap.get(DcMotor.class, "leftCollectionMotor");
         relicExtension = hardwareMap.get(DcMotor.class, "relicExtension");
         deliveryMotor = hardwareMap.get(DcMotor.class, "deliveryMotor");
         elbowServo = hardwareMap.get(CRServo.class, "elbowServo");
@@ -57,7 +57,7 @@ public class IterativeBlueFar extends IterativeRobot {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        collectionMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftCollectionMotor.setDirection(DcMotor.Direction.FORWARD);
         relicExtension.setDirection(DcMotor.Direction.FORWARD);
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
 
@@ -218,18 +218,18 @@ public class IterativeBlueFar extends IterativeRobot {
                 if (startingPosition().isRed()) reverseDriveBase();
                 turnToPosition(TURN_POWER,0);
                 elapsedTime.reset();
-                while ((elapsedTime.time() < 3) && opModeIsActive()) collectionMotor.setPower(-1);
-                collectionMotor.setPower(-0.5);
+                while ((elapsedTime.time() < 3) && opModeIsActive()) leftCollectionMotor.setPower(-1);
+                leftCollectionMotor.setPower(-0.5);
                 elapsedTime.reset();
                 if (startingPosition().isRed()) reverseDriveBase();
                 while ((elapsedTime.time() < 2) && opModeIsActive()) setMotorsPowers(DRIVE_POWER, DRIVE_BASE_MOTORS);
-                collectionMotor.setPower(-0.6);
+                leftCollectionMotor.setPower(-0.6);
                 if (startingPosition().isRed()) reverseDriveBase();
                 driveWithEncoders(DRIVE_POWER, -5);
                 elapsedTime.reset();
-                while ((elapsedTime.time() < 3) && opModeIsActive()) collectionMotor.setPower(-0.6);
+                while ((elapsedTime.time() < 3) && opModeIsActive()) leftCollectionMotor.setPower(-0.6);
                 setMotorsPowers(0, DRIVE_BASE_MOTORS);
-                collectionMotor.setPower(0);
+                leftCollectionMotor.setPower(0);
                 isFinished = true;
             }
         }

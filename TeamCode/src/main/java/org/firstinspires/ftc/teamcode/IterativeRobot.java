@@ -91,7 +91,8 @@ public abstract class IterativeRobot extends LinearOpMode {
     static VuforiaLocalizer vuforia; //later initialized with (sic) vuforiaParameters
     static VuforiaTrackables relicTrackables;
     static VuforiaTrackable relicTemplate;
-    DcMotor collectionMotor;
+    DcMotor leftCollectionMotor;
+    DcMotor rightCollectionMotor;
     VuforiaLocalizer.Parameters vuforiaParameters = new VuforiaLocalizer.Parameters();
     DcMotor relicExtension;
     DcMotor deliveryMotor;
@@ -148,6 +149,12 @@ public abstract class IterativeRobot extends LinearOpMode {
 
         for (DcMotor d : motors)
             d.setPower(power);
+    }
+
+    protected void setCollectionPower(double power){
+
+        leftCollectionMotor.setPower(power);
+        rightCollectionMotor.setPower(power);
     }
 
     protected static void setMotorsModes(DcMotor.RunMode runMode, DcMotor[] motors) {
@@ -284,7 +291,7 @@ public abstract class IterativeRobot extends LinearOpMode {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         offset = getHeading();
 
-        /*collectionMotor = hardwareMap.get(DcMotor.class, "collectionMotor");
+        /*leftCollectionMotor = hardwareMap.get(DcMotor.class, "leftCollectionMotor");
         relicExtension = hardwareMap.get(DcMotor.class, "relicExtension");
         deliveryMotor = hardwareMap.get(DcMotor.class, "deliveryMotor");
         elbowServo = hardwareMap.get(CRServo.class, "elbowServo");*/
@@ -295,7 +302,7 @@ public abstract class IterativeRobot extends LinearOpMode {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        /*collectionMotor.setDirection(DcMotor.Direction.FORWARD);
+        /*leftCollectionMotor.setDirection(DcMotor.Direction.FORWARD);
         relicExtension.setDirection(DcMotor.Direction.FORWARD);
         deliveryMotor.setDirection(DcMotor.Direction.FORWARD);
 */

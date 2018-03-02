@@ -74,7 +74,7 @@ public class ColorTeleOp extends OpMode {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
-        collectionMotor = hardwareMap.get(DcMotor.class, "collectionMotor");
+        collectionMotor = hardwareMap.get(DcMotor.class, "leftCollectionMotor");
         relicExtension = hardwareMap.get(DcMotor.class, "relicExtension");
         deliveryMotor = hardwareMap.get(DcMotor.class, "deliveryMotor");
         barServo = hardwareMap.get(Servo.class, "barServo");
