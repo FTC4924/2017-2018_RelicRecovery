@@ -172,7 +172,7 @@ public class IterativeBlueNear extends IterativeRobot {
             telemetry.addData("vuMark", vuMark.toString());
             telemetry.update();
 
-            if (elapsedTime.seconds() > 3 && !jewelDone) {
+            if (!jewelDone) {
 
                 if (sensorColor.red() > (sensorColor.blue() + 5)) {
 
@@ -208,7 +208,7 @@ public class IterativeBlueNear extends IterativeRobot {
                 }
             }
 
-            if (elapsedTime.seconds() > 5 && jewelDone && !startGlyph) {
+            if (jewelDone && !startGlyph) {//elapsedTime.seconds() > 1 &&
                 armY.setPosition(0.56);//65
                 armX.setPosition(0.35);
                 startGlyph=true;
